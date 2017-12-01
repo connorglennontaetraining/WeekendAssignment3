@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Weekend Assignment 3</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="navigation_search">Search</string>
+    <string name="navigation_reservation">Reservations</string>
+</resources>
