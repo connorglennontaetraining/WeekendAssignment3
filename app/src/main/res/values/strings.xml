@@ -5,4 +5,16 @@
     <string name="title_notifications">Notifications</string>
     <string name="navigation_search">Search</string>
     <string name="navigation_reservation">Reservations</string>
+
+    <string name="google_maps_key">AIzaSyAGIIlVVyy6ApmCi4dHOX7fSdAo--tKpA0</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="reserved_until">Reserved until</string>
+    <string name="reservation_details">Reservation details:</string>
+    <string name="minimum_time">Minimum time</string>
+    <string name="maximum_time">Maximum time</string>
+    <string name="cost">Cost per minute</string>
+    <string name="min">Min</string>
+    <string name="xyz">xyz</string>
+    <string name="max">Max</string>
 </resources>
