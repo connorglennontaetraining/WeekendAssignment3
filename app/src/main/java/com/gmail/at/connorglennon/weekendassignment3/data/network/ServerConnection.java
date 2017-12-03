@@ -32,14 +32,24 @@ public class ServerConnection {
 
     public static IRequest getServerConnection() {
         // Location of the cache.
-        File httpCacheDirectory = new File(MyApplication.getApplication().getCacheDir(),  "responses");
-        // Initialise the cache.
-        Cache cache = new Cache(httpCacheDirectory, CACHE_SIZE);
+//        File httpCacheDirectory = new File(MyApplication.getApplication().getCacheDir(),  "responses");
+
+        /*
+         !
+         !
+         !
+         We need the most up to date data and cached results stop us from achieving this.
+         !
+         !
+         !
+          */
+//        // Initialise the cache.
+//        Cache cache = new Cache(httpCacheDirectory, CACHE_SIZE);
 
         okHttpClient = new OkHttpClient.Builder() // get http client builder.
-                .addNetworkInterceptor(REWRITE_RESPONSE_INTERCEPTOR)
-                .addInterceptor(OFFLINE_INTERCEPTOR)
-                .cache(cache)
+//                .addNetworkInterceptor(REWRITE_RESPONSE_INTERCEPTOR)
+//                .addInterceptor(OFFLINE_INTERCEPTOR)
+//                .cache(cache)
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()

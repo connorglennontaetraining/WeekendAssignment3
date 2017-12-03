@@ -1,16 +1,20 @@
 package com.gmail.at.connorglennon.weekendassignment3;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
-import android.widget.TextView;
+
+import com.gmail.at.connorglennon.weekendassignment3.view.MapFragment;
+import com.gmail.at.connorglennon.weekendassignment3.view.ReservationFragment;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class MainActivity extends AppCompatActivity {
+
+    Unbinder unbinder;
 
     @BindView(R.id.navigationBar)
     BottomNavigationView bottomNavigationView;
@@ -20,10 +24,37 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        unbinder = ButterKnife.bind(this);
+
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .add(R.id.frameContent, new MapFragment())
-                .commit();
+
+        if(savedInstanceState == null) {
+            fragmentManager.beginTransaction()
+                    .add(R.id.frameContent, new MapFragment())
+                    .commit();
+        }
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()){
+                case R.id.navigation_search:
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.frameContent, new MapFragment())
+                            .commit();
+                    break;
+                case R.id.navigation_reservation:
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.frameContent, new ReservationFragment())
+                            .addToBackStack("")
+                            .commit();
+                    break;
+            }
+            return true;
+        });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
+    }
 }

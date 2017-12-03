@@ -5,7 +5,9 @@ import com.gmail.at.connorglennon.weekendassignment3.data.model.ParkingSpace;
 import java.util.List;
 
 import io.reactivex.Observable;
+import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -29,4 +31,7 @@ public interface IRequest {
 
     @GET(ApiConstants.PATH_ID)
     Observable<ParkingSpace> requestParkingSpace(@Path(ApiConstants.PARAM_ID) int paramId);
+
+    @POST(ApiConstants.PATH_ID + ApiConstants.RESERVE)
+    Observable<ParkingSpace> reserveParkingSpace(@Path(ApiConstants.PARAM_ID) int paramId);
 }

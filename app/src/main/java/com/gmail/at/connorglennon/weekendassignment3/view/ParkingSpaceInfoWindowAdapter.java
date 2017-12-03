@@ -1,21 +1,30 @@
-package com.gmail.at.connorglennon.weekendassignment3;
+package com.gmail.at.connorglennon.weekendassignment3.view;
 
 import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.gmail.at.connorglennon.weekendassignment3.R;
+import com.gmail.at.connorglennon.weekendassignment3.data.database.realm.RealmDatabase;
 import com.gmail.at.connorglennon.weekendassignment3.data.model.ParkingSpace;
+import com.gmail.at.connorglennon.weekendassignment3.data.network.ServerConnection;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.http.POST;
+
 /**
  * Created by Connor Glennon on 02/12/2017.
  */
 
-public class ParkingSpaceInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
+public class ParkingSpaceInfoWindowAdapter implements GoogleMap.InfoWindowAdapter{
 
     Context context;
     Map<Marker, ParkingSpace> parkingSpaceMap;
@@ -53,6 +62,11 @@ public class ParkingSpaceInfoWindowAdapter implements GoogleMap.InfoWindowAdapte
 
             TextView tvCost = view.findViewById(R.id.tvCost);
             tvCost.setText(parkingSpace.getCostPerMinute() + "");
+
+            if(parkingSpace.getIsReserved()){
+                TextView tvReserve = view.findViewById(R.id.tvReserve);
+                tvReserve.setText("Can't reserve, this space is already booked");
+            }
         }
         return view;
     }

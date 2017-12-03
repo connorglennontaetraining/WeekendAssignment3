@@ -12,4 +12,6 @@ public class ApiConstants {
 
     public static final String PATH_ID = "{id}";
     public static final String PARAM_ID = "id";
+
+    public static final String RESERVE = "/reserve/";
 }

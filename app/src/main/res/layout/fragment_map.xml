@@ -1,10 +1,11 @@
 <android.support.constraint.ConstraintLayout
+    android:id="@+id/fragmentConstraintLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.gmail.at.connorglennon.weekendassignment3.MapFragment">
+    tools:context="com.gmail.at.connorglennon.weekendassignment3.view.MapFragment">
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
