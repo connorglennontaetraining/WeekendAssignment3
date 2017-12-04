@@ -3,15 +3,13 @@ package com.gmail.at.connorglennon.weekendassignment3;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 
 import com.gmail.at.connorglennon.weekendassignment3.mindorks.ui.base.BaseActivity;
 import com.gmail.at.connorglennon.weekendassignment3.view.search.MapFragment;
-import com.gmail.at.connorglennon.weekendassignment3.view.ReservationFragment;
+import com.gmail.at.connorglennon.weekendassignment3.view.reservations.ReservationFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 public class MainActivity extends BaseActivity {
     @BindView(R.id.navigationBar)

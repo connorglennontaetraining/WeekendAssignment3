@@ -1,4 +1,4 @@
-package com.gmail.at.connorglennon.weekendassignment3.view;
+package com.gmail.at.connorglennon.weekendassignment3.view.reservations;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

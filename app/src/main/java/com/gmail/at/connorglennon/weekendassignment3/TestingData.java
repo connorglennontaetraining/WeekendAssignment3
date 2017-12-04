@@ -5,6 +5,6 @@ package com.gmail.at.connorglennon.weekendassignment3;
  */
 
 public class TestingData {
-    public static final double LAT = 37.753510;
-    public static final double LON = -122.481271;
+    public static final double LAT = 37.769712;
+    public static final double LON = -122.418175;
 }

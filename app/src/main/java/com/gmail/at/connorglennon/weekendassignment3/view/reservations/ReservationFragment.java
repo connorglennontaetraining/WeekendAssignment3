@@ -1,4 +1,4 @@
-package com.gmail.at.connorglennon.weekendassignment3.view;
+package com.gmail.at.connorglennon.weekendassignment3.view.reservations;
 
 
 import android.os.Bundle;
@@ -11,28 +11,33 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gmail.at.connorglennon.weekendassignment3.R;
+import com.gmail.at.connorglennon.weekendassignment3.data.WA3DataManager;
 import com.gmail.at.connorglennon.weekendassignment3.data.database.realm.RealmDatabase;
 import com.gmail.at.connorglennon.weekendassignment3.data.model.Reservation;
+import com.gmail.at.connorglennon.weekendassignment3.mindorks.ui.base.BaseFragment;
+import com.gmail.at.connorglennon.weekendassignment3.mindorks.utils.rx2.AppSchedulerProvider;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ReservationFragment extends Fragment {
+public class ReservationFragment extends BaseFragment implements IView{
 
     Unbinder mButterknifeUnbinder;
     @BindView(R.id.rvReservations)
     RecyclerView mRecyclerView;
 
+    IPresenter presenter;
+
     public ReservationFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,15 +50,29 @@ public class ReservationFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        List<Reservation> reservationList = RealmDatabase.getDatabase().loadAllReservations();
+        onAttach(getContext());
+        presenter = new Presenter(new WA3DataManager(), new AppSchedulerProvider(), new CompositeDisposable());
+        presenter.onAttach(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setAdapter(
-                new ReservationAdapter(reservationList, R.layout.card_reservation, getContext()));
+
+        presenter.onCallGetReservations();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mButterknifeUnbinder.unbind();
+        onDetach();
+    }
+
+    @Override
+    public void onFetchDataSuccess(List<Reservation> reservations) {
+        mRecyclerView.setAdapter(
+                new ReservationAdapter(reservations, R.layout.card_reservation, getContext()));
+    }
+
+    @Override
+    public void onFetchDataError(String message) {
+        onError(message);
     }
 }
