@@ -19,9 +19,8 @@
     <string name="max">Max</string>
     <string name="tap_to_reserve">Tap to reserve</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="reservation_date_label">You reserved this parking space on:</string>
     <string name="reservation_date"><![CDATA[<Reservation date>]]></string>
     <string name="reservation_name"><![CDATA[<Reservation name>]]></string>
+    <string name="some_error">Unfortunately here has been an error.</string>
 </resources>

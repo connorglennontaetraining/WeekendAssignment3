@@ -9,7 +9,7 @@ import java.util.List;
  * Created by Connor Glennon on 02/12/2017.
  */
 
-public abstract class Database {
-    abstract public void saveReservation(ParkingSpace parkingSpace);
-    abstract public List<Reservation> loadAllReservations();
+public interface IDatabase {
+    void saveReservation(ParkingSpace parkingSpace);
+    List<Reservation> loadAllReservations();
 }

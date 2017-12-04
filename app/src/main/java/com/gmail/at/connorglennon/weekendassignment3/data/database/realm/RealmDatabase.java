@@ -1,6 +1,6 @@
 package com.gmail.at.connorglennon.weekendassignment3.data.database.realm;
 
-import com.gmail.at.connorglennon.weekendassignment3.data.database.Database;
+import com.gmail.at.connorglennon.weekendassignment3.data.database.IDatabase;
 import com.gmail.at.connorglennon.weekendassignment3.data.model.ParkingSpace;
 import com.gmail.at.connorglennon.weekendassignment3.data.model.Reservation;
 
@@ -13,12 +13,12 @@ import io.realm.RealmResults;
  * Created by Connor Glennon on 02/12/2017.
  */
 
-public class RealmDatabase extends Database{
+public class RealmDatabase implements IDatabase {
     static RealmDatabase mDatabase;
 
     public static RealmDatabase getDatabase() {
         if (mDatabase == null){
-            synchronized (Database.class){
+            synchronized (IDatabase.class){
                 mDatabase = new RealmDatabase();
             }
         }

@@ -5,17 +5,15 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
-import com.gmail.at.connorglennon.weekendassignment3.view.MapFragment;
+import com.gmail.at.connorglennon.weekendassignment3.mindorks.ui.base.BaseActivity;
+import com.gmail.at.connorglennon.weekendassignment3.view.search.MapFragment;
 import com.gmail.at.connorglennon.weekendassignment3.view.ReservationFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class MainActivity extends AppCompatActivity {
-
-    Unbinder unbinder;
-
+public class MainActivity extends BaseActivity {
     @BindView(R.id.navigationBar)
     BottomNavigationView bottomNavigationView;
 
@@ -24,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        unbinder = ButterKnife.bind(this);
+        setUnBinder(ButterKnife.bind(this));
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -53,8 +51,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unbinder.unbind();
+    protected void setUp() {
+
+    }
+
+    @Override
+    public void openActivityOnTokenExpire() {
+
     }
 }

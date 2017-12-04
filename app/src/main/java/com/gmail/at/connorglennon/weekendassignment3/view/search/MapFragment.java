@@ -1,4 +1,4 @@
-package com.gmail.at.connorglennon.weekendassignment3.view;
+package com.gmail.at.connorglennon.weekendassignment3.view.search;
 
 
 import android.content.res.Resources;
@@ -12,13 +12,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.gmail.at.connorglennon.weekendassignment3.R;
 import com.gmail.at.connorglennon.weekendassignment3.TestingData;
+import com.gmail.at.connorglennon.weekendassignment3.data.WA3DataManager;
 import com.gmail.at.connorglennon.weekendassignment3.data.database.realm.RealmDatabase;
 import com.gmail.at.connorglennon.weekendassignment3.data.model.ParkingSpace;
 import com.gmail.at.connorglennon.weekendassignment3.data.network.ServerConnection;
+import com.gmail.at.connorglennon.weekendassignment3.mindorks.ui.base.BaseFragment;
+import com.gmail.at.connorglennon.weekendassignment3.mindorks.utils.rx2.AppSchedulerProvider;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -32,17 +34,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.http.POST;
 
 import static android.content.ContentValues.TAG;
 
@@ -50,7 +48,9 @@ import static android.content.ContentValues.TAG;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener{
+public class MapFragment extends BaseFragment implements IView, OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener{
+
+    IPresenter presenter;
 
     GoogleMap mGoogleMap;
     Unbinder mButterknifeUnbinder;
@@ -79,21 +79,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        onAttach(getContext());
+
+        presenter = new Presenter(new WA3DataManager(), new AppSchedulerProvider(), new CompositeDisposable());
+        presenter.onAttach(this);
+
         initViews();
         loadData();
     }
 
-    private void loadData(){
-        ServerConnection.getServerConnection()
-                .requestParkingSpaces(TestingData.LAT, TestingData.LON)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(parkingSpaces -> {
-                    mParkingSpaces = parkingSpaces;
-                    loadMap();
-                }, throwable -> {
-                    throwable.printStackTrace();
-                });
+    void initViews(){
+        etLatitude.setEnabled(false);
+        etLatitude.setText(Double.toString(TestingData.LAT));
+        etLongitude.setEnabled(false);
+        etLongitude.setText(Double.toString(TestingData.LON));
+    }
+
+    void loadData(){
+        presenter.onCallGetParkingSpaces(TestingData.LAT, TestingData.LON);
     }
 
     private void loadMap(){
@@ -107,6 +111,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onDestroyView() {
         super.onDestroyView();
         mButterknifeUnbinder.unbind();
+        presenter.onDetach();
+        onDetach();
     }
 
     @Override
@@ -161,18 +167,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(position));
     }
 
-    void initViews(){
-        etLatitude.setEnabled(false);
-        etLatitude.setText(Double.toString(TestingData.LAT));
-        etLongitude.setEnabled(false);
-        etLongitude.setText(Double.toString(TestingData.LON));
-    }
-
     @Override
     public void onInfoWindowClick(Marker marker) {
         if(parkingSpaceMap.containsKey(marker)){
             if(parkingSpaceMap.get(marker).getIsReserved()){
-                Snackbar.make(constraintLayout, "Can't book a reserved space.", Snackbar.LENGTH_LONG)
+                Snackbar.make(constraintLayout, "You can't book a reserved space.", Snackbar.LENGTH_LONG)
                         .show();
                 return;
             }
@@ -182,15 +181,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeOn(Schedulers.io())
         .subscribe(parkingSpace -> {
-            Snackbar.make(constraintLayout, "Parking Space Reserved", Snackbar.LENGTH_LONG)
-                    .show();
+            showMessage("Parking Space Reserved");
             loadData();
-            RealmDatabase.getDatabase().saveReservation(parkingSpaceMap.get(marker));
+            presenter.onSaveReservation(parkingSpace);
         }, throwable -> {
-            Snackbar.make(constraintLayout, "Something wrong.", Snackbar.LENGTH_LONG)
-                    .show();
-            throwable.printStackTrace();
-            loadData();
+            onError(throwable.getMessage());
         });
+    }
+
+    @Override
+    public void onFetchDataSuccess(List<ParkingSpace> parkingSpaces) {
+        Log.d(this.getClass().getSimpleName(), "onFetchDataSuccess");
+        mParkingSpaces = parkingSpaces;
+        loadMap();
+    }
+
+    @Override
+    public void onFetchDataError(String message) {
+        Log.d(this.getClass().getSimpleName(), "onFetchDataError");
+        onError(message);
     }
 }
