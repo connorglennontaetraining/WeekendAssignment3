@@ -13,10 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.gmail.at.connorglennon.weekendassignment3.MyApplication;
 import com.gmail.at.connorglennon.weekendassignment3.R;
 import com.gmail.at.connorglennon.weekendassignment3.TestingData;
 import com.gmail.at.connorglennon.weekendassignment3.data.WA3DataManager;
-import com.gmail.at.connorglennon.weekendassignment3.data.database.realm.RealmDatabase;
 import com.gmail.at.connorglennon.weekendassignment3.data.model.ParkingSpace;
 import com.gmail.at.connorglennon.weekendassignment3.data.network.ServerConnection;
 import com.gmail.at.connorglennon.weekendassignment3.mindorks.ui.base.BaseFragment;
@@ -35,6 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -48,9 +50,10 @@ import static android.content.ContentValues.TAG;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MapFragment extends BaseFragment implements IView, OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener{
+public class SearchFragment extends BaseFragment implements ISearchView, OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener{
 
-    IPresenter presenter;
+    @Inject
+    ISearchPresenter presenter;
 
     GoogleMap mGoogleMap;
     Unbinder mButterknifeUnbinder;
@@ -64,7 +67,7 @@ public class MapFragment extends BaseFragment implements IView, OnMapReadyCallba
     @BindView(R.id.etLongitude)
     EditText etLongitude;
 
-    public MapFragment() {
+    public SearchFragment() {
         // Required empty public constructor
     }
 
@@ -73,6 +76,7 @@ public class MapFragment extends BaseFragment implements IView, OnMapReadyCallba
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
         mButterknifeUnbinder = ButterKnife.bind(this, view);
+        injectDagger();
         return view;
     }
 
@@ -82,7 +86,6 @@ public class MapFragment extends BaseFragment implements IView, OnMapReadyCallba
 
         onAttach(getContext());
 
-        presenter = new Presenter(new WA3DataManager(), new AppSchedulerProvider(), new CompositeDisposable());
         presenter.onAttach(this);
 
         initViews();
@@ -94,6 +97,10 @@ public class MapFragment extends BaseFragment implements IView, OnMapReadyCallba
         etLatitude.setText(Double.toString(TestingData.LAT));
         etLongitude.setEnabled(false);
         etLongitude.setText(Double.toString(TestingData.LON));
+    }
+
+    void injectDagger(){
+        ((MyApplication) MyApplication.getApplication()).getSearchPresenterComponent().inject(this);
     }
 
     void loadData(){
@@ -163,7 +170,7 @@ public class MapFragment extends BaseFragment implements IView, OnMapReadyCallba
         mGoogleMap.setInfoWindowAdapter(parkingSpaceInfoWindowAdapter);
 
         LatLng position = new LatLng(TestingData.LAT, TestingData.LON);
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(14.0f));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(18.0f));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(position));
     }
 

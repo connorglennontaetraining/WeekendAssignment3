@@ -10,14 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.gmail.at.connorglennon.weekendassignment3.MyApplication;
 import com.gmail.at.connorglennon.weekendassignment3.R;
 import com.gmail.at.connorglennon.weekendassignment3.data.WA3DataManager;
-import com.gmail.at.connorglennon.weekendassignment3.data.database.realm.RealmDatabase;
 import com.gmail.at.connorglennon.weekendassignment3.data.model.Reservation;
 import com.gmail.at.connorglennon.weekendassignment3.mindorks.ui.base.BaseFragment;
 import com.gmail.at.connorglennon.weekendassignment3.mindorks.utils.rx2.AppSchedulerProvider;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,15 +29,16 @@ import io.reactivex.disposables.CompositeDisposable;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ReservationFragment extends BaseFragment implements IView{
+public class ReservationsFragment extends BaseFragment implements IReservationsView {
 
     Unbinder mButterknifeUnbinder;
     @BindView(R.id.rvReservations)
     RecyclerView mRecyclerView;
 
-    IPresenter presenter;
+    @Inject
+    IReservationsPresenter presenter;
 
-    public ReservationFragment() {
+    public ReservationsFragment() {
         // Required empty public constructor
     }
 
@@ -44,6 +47,7 @@ public class ReservationFragment extends BaseFragment implements IView{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_reservation, container, false);
         mButterknifeUnbinder = ButterKnife.bind(this, view);
+        injectDagger();
         return view;
     }
 
@@ -51,7 +55,6 @@ public class ReservationFragment extends BaseFragment implements IView{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         onAttach(getContext());
-        presenter = new Presenter(new WA3DataManager(), new AppSchedulerProvider(), new CompositeDisposable());
         presenter.onAttach(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -68,11 +71,15 @@ public class ReservationFragment extends BaseFragment implements IView{
     @Override
     public void onFetchDataSuccess(List<Reservation> reservations) {
         mRecyclerView.setAdapter(
-                new ReservationAdapter(reservations, R.layout.card_reservation, getContext()));
+                new ReservationsAdapter(reservations, R.layout.card_reservation, getContext()));
     }
 
     @Override
     public void onFetchDataError(String message) {
         onError(message);
+    }
+
+    void injectDagger(){
+        ((MyApplication) MyApplication.getApplication()).getReservationsPresenterComponent().inject(this);
     }
 }

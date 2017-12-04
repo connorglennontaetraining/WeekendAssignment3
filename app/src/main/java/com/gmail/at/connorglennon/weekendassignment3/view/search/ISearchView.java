@@ -9,7 +9,7 @@ import java.util.List;
  * Created by Connor Glennon on 03/12/2017.
  */
 
-public interface IView extends MvpView {
+public interface ISearchView extends MvpView {
     void onFetchDataSuccess(List<ParkingSpace> parkingSpaces);
     void onFetchDataError(String message);
 }

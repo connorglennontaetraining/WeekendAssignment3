@@ -5,8 +5,8 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 
 import com.gmail.at.connorglennon.weekendassignment3.mindorks.ui.base.BaseActivity;
-import com.gmail.at.connorglennon.weekendassignment3.view.search.MapFragment;
-import com.gmail.at.connorglennon.weekendassignment3.view.reservations.ReservationFragment;
+import com.gmail.at.connorglennon.weekendassignment3.view.search.SearchFragment;
+import com.gmail.at.connorglennon.weekendassignment3.view.reservations.ReservationsFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +26,7 @@ public class MainActivity extends BaseActivity {
 
         if(savedInstanceState == null) {
             fragmentManager.beginTransaction()
-                    .add(R.id.frameContent, new MapFragment())
+                    .add(R.id.frameContent, new SearchFragment())
                     .commit();
         }
 
@@ -34,12 +34,12 @@ public class MainActivity extends BaseActivity {
             switch (item.getItemId()){
                 case R.id.navigation_search:
                     fragmentManager.beginTransaction()
-                            .replace(R.id.frameContent, new MapFragment())
+                            .replace(R.id.frameContent, new SearchFragment())
                             .commit();
                     break;
                 case R.id.navigation_reservation:
                     fragmentManager.beginTransaction()
-                            .replace(R.id.frameContent, new ReservationFragment())
+                            .replace(R.id.frameContent, new ReservationsFragment())
                             .addToBackStack("")
                             .commit();
                     break;

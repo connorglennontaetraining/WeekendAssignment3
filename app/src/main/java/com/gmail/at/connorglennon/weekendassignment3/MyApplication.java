@@ -4,6 +4,11 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Base64;
 
+import com.gmail.at.connorglennon.weekendassignment3.dagger2.DaggerReservationsPresenterComponent;
+import com.gmail.at.connorglennon.weekendassignment3.dagger2.DaggerSearchPresenterComponent;
+import com.gmail.at.connorglennon.weekendassignment3.dagger2.ReservationsPresenterComponent;
+import com.gmail.at.connorglennon.weekendassignment3.dagger2.SearchPresenterComponent;
+
 import java.security.SecureRandom;
 
 import io.realm.Realm;
@@ -23,6 +28,9 @@ public class MyApplication extends Application {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor sharedPreferencesEditor;
 
+    ReservationsPresenterComponent reservationsPresenterComponent;
+    SearchPresenterComponent searchPresenterComponent;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -32,6 +40,9 @@ public class MyApplication extends Application {
         sharedPreferencesEditor = sharedPreferences.edit();
 
         Realm.init(this);
+
+        reservationsPresenterComponent = DaggerReservationsPresenterComponent.create();
+        searchPresenterComponent = DaggerSearchPresenterComponent.create();
 
         if(sharedPreferences.getString("ENCKEY", null) == null)
         {
@@ -49,5 +60,21 @@ public class MyApplication extends Application {
                 .build();
 
         Realm.setDefaultConfiguration(configuration);
+    }
+
+    public ReservationsPresenterComponent getReservationsPresenterComponent() {
+        return reservationsPresenterComponent;
+    }
+
+    public void setReservationsPresenterComponent(ReservationsPresenterComponent reservationsPresenterComponent) {
+        this.reservationsPresenterComponent = reservationsPresenterComponent;
+    }
+
+    public SearchPresenterComponent getSearchPresenterComponent() {
+        return searchPresenterComponent;
+    }
+
+    public void setSearchPresenterComponent(SearchPresenterComponent searchPresenterComponent) {
+        this.searchPresenterComponent = searchPresenterComponent;
     }
 }

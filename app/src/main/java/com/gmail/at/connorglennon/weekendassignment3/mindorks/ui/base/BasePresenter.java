@@ -25,7 +25,7 @@ import com.gmail.at.connorglennon.weekendassignment3.mindorks.utils.rx2.Schedule
 import io.reactivex.disposables.CompositeDisposable;
 
 /**
- * Base class that implements the Presenter interface and provides a base implementation for
+ * Base class that implements the ReservationsPresenter interface and provides a base implementation for
  * onAttach() and onDetach(). It also handles keeping a reference to the mvpView that
  * can be accessed from the children classes by calling getMvpView().
  */
@@ -86,8 +86,8 @@ public class BasePresenter<V extends MvpView> implements MvpPresenter<V> {
 
     public static class MvpViewNotAttachedException extends RuntimeException {
         public MvpViewNotAttachedException() {
-            super("Please call Presenter.onAttach(MvpView) before" +
-                    " requesting data to the Presenter");
+            super("Please call ReservationsPresenter.onAttach(MvpView) before" +
+                    " requesting data to the ReservationsPresenter");
         }
     }
 }

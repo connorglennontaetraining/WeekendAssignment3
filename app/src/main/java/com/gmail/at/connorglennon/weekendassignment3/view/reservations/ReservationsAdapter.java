@@ -17,13 +17,13 @@ import java.util.zip.Inflater;
  * Created by Connor Glennon on 03/12/2017.
  */
 
-public class ReservationAdapter extends RecyclerView.Adapter {
+public class ReservationsAdapter extends RecyclerView.Adapter {
 
     List<Reservation> reservationList;
     int layoutId;
     Context context;
 
-    public ReservationAdapter(List<Reservation> reservationList, int layoutId, Context context) {
+    public ReservationsAdapter(List<Reservation> reservationList, int layoutId, Context context) {
         this.reservationList = reservationList;
         this.layoutId = layoutId;
         this.context = context;
@@ -41,6 +41,9 @@ public class ReservationAdapter extends RecyclerView.Adapter {
         Reservation reservation = reservationList.get(position);
         reservationViewHolder.tvReservationName.setText(reservation.getName());
         reservationViewHolder.tvReservationDate.setText(reservation.getDate());
+        ((ReservationViewHolder) holder).view.setOnClickListener(view -> {
+
+        });
     }
 
     @Override
