@@ -2,7 +2,7 @@ machine:
     java:
         version: oraclejdk8
     environment:
-        ANDROID_HOME: C\:\\Users\\Public\\Roaming\\android\\sdk
+        ANDROID_HOME: C:\Users\Public\Roaming\android\sdk
         ANDROID_BUILD_TOOLS: 27.0.1
         APPLICATION_ID: com.gmail.at.connorglennon.weekendassignment3
         FABRIC_API_KEY: 0000000000000000000000000000000000000000 
